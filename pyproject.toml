@@ -6,12 +6,15 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "beautifulsoup4>=4.13.3",
+    "pandas>=2.2.3",
+    "pdfplumber>=0.11.6",
     "requests>=2.32.3",
 ]
 
 [dependency-groups]
 dev = [
     "mypy>=1.15.0",
+    "pandas-stubs>=2.2.3.250308",
     "pytest>=8.3.5",
     "requests-mock>=1.12.1",
     "responses>=0.25.7",
