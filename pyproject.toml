@@ -1,0 +1,20 @@
+[project]
+name = "intuitive-care"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4>=4.13.3",
+    "requests>=2.32.3",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15.0",
+    "pytest>=8.3.5",
+    "requests-mock>=1.12.1",
+    "responses>=0.25.7",
+    "types-requests>=2.32.0.20250328",
+]
+
