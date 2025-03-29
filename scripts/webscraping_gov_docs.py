@@ -3,13 +3,14 @@ import requests
 from bs4 import BeautifulSoup, Tag
 import re
 import os
-import zipfile
-
-URL_GOV = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
-DOWNLOAD_DIR = "./data"
-FILENAME_ZIP = "./data/compress_gov"
+from utils import compress_file
 
 log = logger(__file__)
+
+URL_GOV = "https://www.gov.br/ans/pt-br/acesso-a-informacao/participacao-da-sociedade/atualizacao-do-rol-de-procedimentos"
+DIR_DATA = "./data"
+FILENAME_ZIP = "./data/compress_gov"
+
 
 def fetch_page(url: str) -> str | None:
     """
@@ -87,59 +88,43 @@ def parse_files(
     except ValueError as e:
         log.error(e)
     except Exception as e:
-        log.error(f"Unexpected error: {e}")
+        log.error(e)
     return []
 
 
-def dowload_file(file_url: str, download_dir: str) -> None:
+def dowload_file(file_url: str, file_dir: str) -> None:
     """
     Download from the provided url
 
     Args:
         file_url (str): download url
-        download_dir (str): internal folder for storage
+        file_dir (str): internal folder for storage
     """
     try:
-        local_filename = os.path.join(download_dir, file_url.split("/")[-1])
+        local_filename = os.path.join(file_dir, file_url.split("/")[-1])
         with requests.get(file_url, stream=True) as r:
             with open(local_filename, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     f.write(chunk)
     except Exception as e:
-        log.error(f"Unexpected error: {e}")
+        log.error(e)
 
 
-def compress_file(download_dir: str, filename_zip: str) -> None:
-    """
-    Compress files within a folder
-
-    Args:
-        download_dir (str): folder of files that will be compressed
-        filename_zip (str): zip file name
-    """
-    path = os.path.join(download_dir)
-    files = os.listdir(path)
-    if not files:
-        log.error("Empty file list")
-        return None
-    files = [os.path.join(download_dir, file) for file in files]
-    log.debug(files)
-    with zipfile.ZipFile(filename_zip, "w") as zip:
-        for file in files:
-            zip.write(file, arcname=file)
-
-
-def main(url: str = URL_GOV, download_dir: str = DOWNLOAD_DIR, filename_zip: str = FILENAME_ZIP):
+def main(
+    url: str = URL_GOV,
+    dir_data: str = DIR_DATA,
+    filename_zip: str = FILENAME_ZIP,
+):
     html_content = fetch_page(url)
     if not html_content:
         return
     file_links = parse_files(html_content, tag_content=".*Anexo*.", target_file=".pdf")
     if not file_links:
         return
-    os.makedirs(download_dir, exist_ok=True)
+    os.makedirs(dir_data, exist_ok=True)
     for file_link in file_links:
-        dowload_file(file_link, download_dir)
-    compress_file(download_dir, filename_zip)
+        dowload_file(file_link, dir_data)
+    compress_file(dir_data, filename_zip, [".pdf"])
 
 
 if __name__ == "__main__":
