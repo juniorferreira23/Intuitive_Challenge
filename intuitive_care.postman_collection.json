@@ -1,0 +1,38 @@
+{
+	"info": {
+		"_postman_id": "3b30de59-b969-4cec-b50b-5f1a77b36e24",
+		"name": "intuitive_care",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38605337"
+	},
+	"item": [
+		{
+			"name": "Consult_Operatos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"registro_ans\": \"\",\n  \"cnpj\": \"\",\n  \"razao_social\": \"AMIL\",\n  \"cidade\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
