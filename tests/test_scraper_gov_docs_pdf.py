@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from io import StringIO
 import zipfile
 
-from scripts.webscraping_gov_docs import (
+from scripts.scraper_gov_docs import (
     fetch_page,
     parse_files,
     dowload_file,
@@ -135,10 +135,10 @@ class TesteGovDocs(unittest.TestCase):
         self.assertIsNone(result)
 
 
-    @patch("scripts.webscraping_gov_docs.fetch_page")
-    @patch("scripts.webscraping_gov_docs.parse_files")
-    @patch("scripts.webscraping_gov_docs.dowload_file")
-    @patch("scripts.webscraping_gov_docs.compress_file")
+    @patch("scripts.scraper_gov_docs.fetch_page")
+    @patch("scripts.scraper_gov_docs.parse_files")
+    @patch("scripts.scraper_gov_docs.dowload_file")
+    @patch("scripts.scraper_gov_docs.compress_file")
     @patch("os.makedirs")
     def test_main_success_flow(
         self, mock_makedirs, mock_compress, mock_download, mock_parse, mock_fetch
@@ -157,7 +157,7 @@ class TesteGovDocs(unittest.TestCase):
         self.assertEqual(mock_download.call_count, 2)
         mock_compress.assert_called_once_with("./downloads", "./output.zip", [".pdf"])
 
-    @patch("scripts.webscraping_gov_docs.fetch_page")
+    @patch("scripts.scraper_gov_docs.fetch_page")
     def test_main_fetch_failure(self, mock_fetch):
         """Testa o fluxo principal quando o fetch falha"""
         mock_fetch.return_value = None
@@ -166,8 +166,8 @@ class TesteGovDocs(unittest.TestCase):
 
         mock_fetch.assert_called_once_with("http://test.com")
 
-    @patch("scripts.webscraping_gov_docs.fetch_page")
-    @patch("scripts.webscraping_gov_docs.parse_files")
+    @patch("scripts.scraper_gov_docs.fetch_page")
+    @patch("scripts.scraper_gov_docs.parse_files")
     def test_main_no_files_found(self, mock_parse, mock_fetch):
         """Testa o fluxo principal quando nenhum arquivo é encontrado"""
         mock_fetch.return_value = "<html>content</html>"

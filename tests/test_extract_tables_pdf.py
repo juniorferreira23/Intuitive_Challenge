@@ -2,7 +2,7 @@ import unittest
 import os
 import pandas as pd
 from unittest.mock import patch, MagicMock
-from scripts.extract_tables_pdf import extract_tables
+from scripts.extract_tables_pdf import extract_tables_pdf
 
 
 class TestExtractTables(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestExtractTables(unittest.TestCase):
         output_file = "test_output.csv"
 
         try:
-            extract_tables("fake_path.pdf", output_file)
+            extract_tables_pdf("fake_path.pdf", output_file)
 
             self.assertTrue(os.path.exists(output_file))
 
